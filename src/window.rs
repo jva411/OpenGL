@@ -1,9 +1,8 @@
 use beryllium::{events::{Event, SDLK_ESCAPE}, init::InitFlags, video::{CreateWinArgs, GlContextFlags, GlProfile, GlWindow}, Sdl};
-use gl33::{global_loader::{glClear, glDrawArrays}, GL_COLOR_BUFFER_BIT, GL_TRIANGLES};
+use gl33::{global_loader::{glClear, glDrawArrays, glDrawElements}, GL_COLOR_BUFFER_BIT, GL_TRIANGLES, GL_UNSIGNED_INT};
 
 use crate::opengl::load_gl;
 
-#[allow(dead_code)]
 pub struct Window {
   width: i32,
   height: i32,
@@ -35,6 +34,7 @@ impl Window {
     unsafe {
       glClear(GL_COLOR_BUFFER_BIT);
       glDrawArrays(GL_TRIANGLES, 0, 3);
+      // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 as *const _);
     }
     self.window.swap_window();
 

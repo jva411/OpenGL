@@ -2,11 +2,13 @@ use gl33::{global_loader::{glAttachShader, glCreateProgram, glGetProgramInfoLog,
 
 use crate::{gl_check, opengl::{shader::Shader, types::GLuint}};
 
+#[allow(dead_code)]
 pub struct Program {
     pub name: GLuint,
     pub shaders: Vec<Shader>,
 }
 
+#[allow(dead_code)]
 impl Program {
     pub fn new(shaders: Vec<Shader>) -> Option<Self> {
         let name = glCreateProgram();

@@ -1,7 +1,8 @@
-use gl33::{global_loader::{glBindBuffer, glGenBuffers}};
+use gl33::{global_loader::{glBindBuffer, glBufferData, glGenBuffers}, GL_STATIC_DRAW};
 
 use crate::opengl::types::GLuint;
 
+#[allow(non_snake_case)]
 pub mod BufferType {
     use gl33::{GLenum, GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER};
 
@@ -43,5 +44,16 @@ impl Buffer {
             glBindBuffer(self._type.gl_type, 0);
         }
         return self;
+    }
+
+    pub fn buffer_data(&self, data: &[u8]) {
+        unsafe {
+            glBufferData(
+                self._type.gl_type,
+                data.len().try_into().unwrap(),
+                data.as_ptr().cast(),
+                GL_STATIC_DRAW,
+            );
+        }
     }
 }

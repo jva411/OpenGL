@@ -2,6 +2,7 @@ use gl33::{global_loader::{glCompileShader, glCreateShader, glDeleteShader, glGe
 
 use crate::{gl_check, opengl::types::GLuint};
 
+#[allow(non_snake_case)]
 pub mod ShaderType {
     use gl33::{GLenum, GL_FRAGMENT_SHADER, GL_VERTEX_SHADER};
 
@@ -14,6 +15,7 @@ pub mod ShaderType {
     pub const FRAGMENT: Type = Type { gl_type: GL_FRAGMENT_SHADER };
 }
 
+#[allow(dead_code)]
 pub struct Shader {
     pub name: GLuint,
     pub _type: ShaderType::Type,
@@ -44,8 +46,6 @@ impl Shader {
     }
 
     pub fn delete(&self) {
-        unsafe {
-            glDeleteShader(self.name);
-        }
+        glDeleteShader(self.name);
     }
 }

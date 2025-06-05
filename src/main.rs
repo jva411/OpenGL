@@ -2,6 +2,7 @@ use window::Window;
 
 mod window;
 mod opengl;
+mod objects;
 
 fn main() {
   let window = Window::new(1280, 720, "Hello, world!");

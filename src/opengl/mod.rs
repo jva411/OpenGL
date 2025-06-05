@@ -1,35 +1,14 @@
 use beryllium::video::GlWindow;
-use gl33::{global_loader::{glBufferData, glClearColor, glEnableVertexAttribArray, glVertexAttribPointer, load_global_gl}, GL_ARRAY_BUFFER, GL_FALSE, GL_FLOAT, GL_STATIC_DRAW};
+use gl33::global_loader::{glClearColor, load_global_gl};
 
-use crate::opengl::{buffer::{Buffer, BufferType}, program::Program, shader::{Shader, ShaderType}, types::Vertex, vertex_array::VertexArray};
+use crate::{objects::{quad::load_quad, triangle::{load_triangle, FRAGMENT_SHADER, VERTEX_SHADER}}, opengl::{program::Program, render_mode::{set_render_mode, RenderMode}, shader::{Shader, ShaderType}}};
 
-mod buffer;
-mod program;
-mod types;
-mod vertex_array;
-mod shader;
-
-const TRIANGLE: [Vertex; 3] = [
-  [-0.5, -0.5, 0.0],
-  [0.5, -0.5, 0.0],
-  [0.0, 0.5, 0.0],
-];
-
-const VERTEX_SHADER: &str = r#"#version 330 core
-  layout (location = 0) in vec3 pos;
-
-  void main() {
-    gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);
-  }
-"#;
-
-const FRAGMENT_SHADER: &str = r#"#version 330 core
-  out vec4 color;
-
-  void main() {
-    color = vec4(1.0, 0.0, 0.0, 1.0);
-  }
-"#;
+pub mod buffer;
+pub mod render_mode;
+pub mod program;
+pub mod types;
+pub mod vertex_array;
+pub mod shader;
 
 #[macro_export]
 macro_rules! gl_check {
@@ -48,37 +27,13 @@ macro_rules! gl_check {
 }
 
 
-fn load_triangle() {
-  unsafe {
-    let _vao = VertexArray::new().expect("Failed to create vertex array").bind();
-    let _vbo = Buffer::new(BufferType::ARRAY).expect("Failed to create vertex buffer").bind();
-
-    glVertexAttribPointer(
-      0,
-      3,
-      GL_FLOAT,
-      GL_FALSE.0 as u8,
-      size_of::<Vertex>().try_into().unwrap(),
-      0 as *const _,
-    );
-    glEnableVertexAttribArray(0);
-
-    glBufferData(
-      GL_ARRAY_BUFFER,
-      size_of_val(&TRIANGLE).try_into().unwrap(),
-      TRIANGLE.as_ptr().cast(),
-      GL_STATIC_DRAW,
-    );
-  }
-}
-
-
 pub fn load_gl(window: &GlWindow) {
   unsafe {
     load_global_gl(&|name| window.get_proc_address(name));
     glClearColor(0.2, 0.3, 0.3, 1.0);
 
     load_triangle();
+    // load_quad();
 
     let shaders = vec![
       Shader::new(ShaderType::VERTEX, VERTEX_SHADER.to_string()).expect("Failed to create vertex shader"),
@@ -87,5 +42,7 @@ pub fn load_gl(window: &GlWindow) {
     let program = Program::new(shaders).expect("Failed to create program!").bind();
 
     program.shaders.iter().for_each(|shader| shader.delete());
+
+    // set_render_mode(RenderMode::WIRE_FRAME);
   }
 }
