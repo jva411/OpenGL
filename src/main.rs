@@ -1,11 +1,12 @@
 use window::Window;
 
-mod window;
-mod opengl;
 mod objects;
+mod opengl;
+mod scene;
+mod window;
 
 fn main() {
-  let window = Window::new(1280, 720, "Hello, world!");
+  let window = Window::new(800, 450, "Hello, world!");
 
   main_loop(&window);
 }

@@ -1,30 +1,43 @@
-use gl33::{global_loader::{glEnableVertexAttribArray, glVertexAttribPointer}, GL_FALSE, GL_FLOAT};
+use std::{env::current_dir, fs::File};
 
-use crate::opengl::{buffer::{Buffer, BufferType}, types::Vertex, vertex_array::VertexArray};
+use crate::opengl::{buffer::{Buffer, BufferType}, texture::Texture, types::Vertex3, vertex::set_vertex_attribute, vertex_array::VertexArray};
 
-const TRIANGLE: [Vertex; 3] = [
-  [-0.5, -0.5, 1.0],
-  [ 0.5, -0.5, 1.0],
-  [ 0.0,  0.5, 0.0],
+const TRIANGLE: [Vertex3; 3] = [
+  // [[x, y, z], [r, g, b], [s, t, r]]
+  [[-0.5, -0.5, 0.0], [1.0, 0.0, 0.0], [0.0, 0.0, 0.0]],
+  [[ 0.5, -0.5, 0.0], [0.0, 1.0, 0.0], [5.0, 0.0, 0.0]],
+  [[ 0.0,  0.5, 0.0], [0.0, 0.0, 1.0], [2.5, 5.0, 0.0]],
 ];
 
 pub const VERTEX_SHADER: &str = r#"#version 330 core
   layout (location = 0) in vec3 pos;
+  layout (location = 1) in vec3 color;
+  layout (location = 2) in vec3 aTextCoord;
 
-  out vec4 vertexColor;
+  out vec3 vertexColor;
+  out vec2 textCoord;
+
+  uniform mat4 model;
+  uniform mat4 view;
+  uniform mat4 projection;
 
   void main() {
-    gl_Position = vec4(pos, 1.0);
-    vertexColor = vec4((pos.x * -2.0) + pos.z, (pos.y * 2.0) + pos.z, (pos.x * 2.0) + pos.z, 1.0);
+    gl_Position = projection * view * model * vec4(pos, 1.0);
+    vertexColor = color;
+    textCoord = aTextCoord.st;
   }
 "#;
 
 pub const FRAGMENT_SHADER: &str = r#"#version 330 core
-  in vec4 vertexColor;
+  in vec3 vertexColor;
+  in vec2 textCoord;
+
   out vec4 outColor;
 
+  uniform sampler2D texture1;
+
   void main() {
-    outColor = vertexColor;
+    outColor = texture(texture1, textCoord);
   }
 "#;
 
@@ -32,17 +45,13 @@ pub fn load_triangle() {
   let _vao = VertexArray::new().expect("Failed to create vertex array").bind();
   let vbo = Buffer::new(BufferType::ARRAY).expect("Failed to create vertex buffer").bind();
 
-  unsafe {
-    glVertexAttribPointer(
-      0,
-      3,
-      GL_FLOAT,
-      GL_FALSE.0 as u8,
-      size_of::<Vertex>().try_into().unwrap(),
-      0 as *const _,
-    );
-    glEnableVertexAttribArray(0);
-  }
+  set_vertex_attribute(0);
+  set_vertex_attribute(1);
+  set_vertex_attribute(2);
 
   vbo.buffer_data(bytemuck::cast_slice(&TRIANGLE));
+
+  let texture = Texture::new().expect("Failed to create texture");
+  texture.bind();
+  texture.load_RGB(image::open("assets/textures/wall_bricks.jpg").unwrap().to_rgb8());
 }

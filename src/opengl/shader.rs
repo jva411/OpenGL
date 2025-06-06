@@ -1,3 +1,5 @@
+use std::fs::File;
+
 use gl33::{global_loader::{glCompileShader, glCreateShader, glDeleteShader, glGetShaderInfoLog, glGetShaderiv, glShaderSource}, GL_COMPILE_STATUS};
 
 use crate::{gl_check, opengl::types::GLuint};
@@ -43,6 +45,11 @@ impl Shader {
         }
 
         return Some(Shader { name, _type, source });
+    }
+
+    pub fn from_File(_type: ShaderType::Type, file: &File) -> Option<Self> {
+        let source = std::io::read_to_string(file).unwrap();
+        return Shader::new(_type, source);
     }
 
     pub fn delete(&self) {
