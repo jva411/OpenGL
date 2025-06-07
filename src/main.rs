@@ -6,12 +6,12 @@ mod scene;
 mod window;
 
 fn main() {
-  let window = Window::new(800, 450, "Hello, world!");
+  let mut window = Window::new(800, 450, "Hello, world!");
 
-  main_loop(&window);
+  main_loop(&mut window);
 }
 
-fn main_loop(window: &Window) {
+fn main_loop(window: &mut Window) {
   'main_loop: loop {
     match window.loop_step() {
       Ok(_) => (),
