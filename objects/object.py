@@ -1,6 +1,6 @@
 import numpy as np
-from objects.transform import Transform
 from opengl.renderer import Renderer
+from utils.transform import Transform
 
 aux = 0
 
@@ -22,14 +22,3 @@ class Object:
 
     def updateModel(self):
         Renderer.renderer.program.setUniformMatrix4f('model', self.transform.get_model().T)
-
-        global aux
-        if aux < 2:
-            aux += 1
-            print(self.transform.get_model().T)
-        # Renderer.renderer.program.setUniformMatrix4f('model', np.array([
-        #     [0.5, 0.0, 0.0, 0.0],
-        #     [0.0, 0.5, 0.0, 0.0],
-        #     [0.0, 0.0, 1.0, 0.0],
-        #     [0.5, 0., 0.0, 1.0],
-        # ], dtype=np.float32))

@@ -1,7 +1,7 @@
 import numpy as np
 from opengl.vao import VAO
 from objects.object import Object
-from objects.transform import Transform
+from utils.transform import Transform
 from OpenGL.GL import glDrawArrays, GL_TRIANGLES
 
 from opengl.vbo import VBO
