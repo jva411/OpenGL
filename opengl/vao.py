@@ -4,7 +4,6 @@ from OpenGL.GL import glGenVertexArrays, glBindVertexArray, glVertexAttribPointe
 
 class VAO:
     def __init__(self):
-        # self.vao = glGenVertexArrays(1)
         self.vao = glGenVertexArrays(1)
 
     def bind(self):

@@ -9,4 +9,4 @@ class VBO:
         glBindBuffer(GL_ARRAY_BUFFER, self.vbo)
 
     def buffer_data(self, data: np.ndarray):
-        glBufferData(GL_ARRAY_BUFFER, data.nbytes, data.tobytes(), GL_STATIC_DRAW)
+        glBufferData(GL_ARRAY_BUFFER, data.nbytes, data, GL_STATIC_DRAW)

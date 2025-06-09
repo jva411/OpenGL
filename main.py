@@ -1,4 +1,5 @@
 import numpy as np
+from objects.cube import Cube
 from scene.scene import Scene
 from scene.camera import Camera
 from scene.window import Window
@@ -35,7 +36,13 @@ def main():
     t2.translate(-0.5, -0.5, 0.5)
 
     triangles = [t0, t1, t2]
-    objects = [*triangles]
+
+    c0 = Cube()
+    c0.translate(0.5, 0.5, 0.5)
+
+    cubes = [c0]
+    # cubes = []
+    objects = [*triangles, *cubes]
 
     scene = Scene(camera, objects)
 

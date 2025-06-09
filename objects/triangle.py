@@ -12,8 +12,8 @@ TRIANGLE = np.array([
     [ 0.0,  0.5, 0.0],
 ], dtype=np.float32)
 
-vao = None
-vbo = None
+vao: VAO = None
+vbo: VBO = None
 
 def init_triangle():
     global vao, vbo
@@ -27,6 +27,10 @@ def init_triangle():
         vao.addAttribute(0)
         vbo.buffer_data(TRIANGLE)
 
+def bind_triangle():
+    vao.bind()
+    vbo.bind()
+
 class Triangle(Object):
     def __init__(self, transform: Transform = None):
         super().__init__(transform)
@@ -34,4 +38,5 @@ class Triangle(Object):
 
     def tick(self):
         super().tick()
+        bind_triangle()
         glDrawArrays(GL_TRIANGLES, 0, 3)

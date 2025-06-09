@@ -45,7 +45,7 @@ class Camera:
         ], dtype=np.float32)
 
     def translate(self, right, up, forward):
-        self.position += right * self.rotated_right + up * self.rotated_up - forward * self.rotated_direction
+        self.position += right * self.rotated_right + up * np.array([0.0, 1.0, 0.0]) - forward * self.rotated_direction
 
     def rotate(self, x_rad=0.0, y_rad=0.0, z_rad=0.0):
         self.rotation += np.array([x_rad, y_rad, z_rad])
