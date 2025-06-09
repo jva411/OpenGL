@@ -9,16 +9,13 @@ class VAO:
     def bind(self):
         glBindVertexArray(self.vao)
 
-    def addAttribute(self, index: int):
-        size = 4 * 3
-        skip = size * index
-
+    def addAttribute(self, index: int, stride: int, skip: int):
         glVertexAttribPointer(
             index,
             3,
             GL_FLOAT,
             GL_FALSE,
-            size,
+            stride,
             ctypes.c_void_p(skip),
         )
         glEnableVertexAttribArray(index)

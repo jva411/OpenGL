@@ -11,7 +11,7 @@ class Window:
         self.title = title
         self.keep_running = True
         self.movement_speed = 1.0
-        self.mouse_sensitivity = 5.0
+        self.mouse_sensitivity = 8.0
 
     def open(self):
         pygame.display.init()

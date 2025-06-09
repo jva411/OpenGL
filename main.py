@@ -25,17 +25,13 @@ def main():
 
     t0 = Triangle()
     t0.scale(0.5, 0.5, 0.0)
-    t0.translate(0.5, 0.5, 0.5)
+    t0.translate(0.0, 0.0, 0.5)
 
     t1 = Triangle()
     t1.scale(0.5, 0.5, 0.0)
-    t1.translate(0.0, 0.0, 0.5)
+    t1.translate(-0.5, -0.5, 0.5)
 
-    t2 = Triangle()
-    t2.scale(0.5, 0.5, 0.0)
-    t2.translate(-0.5, -0.5, 0.5)
-
-    triangles = [t0, t1, t2]
+    triangles = [t0, t1]
 
     c0 = Cube()
     c0.translate(0.5, 0.5, 0.5)

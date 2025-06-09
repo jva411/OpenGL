@@ -24,7 +24,7 @@ def init_triangle():
         vbo = VBO()
         vbo.bind()
 
-        vao.addAttribute(0)
+        vao.addAttribute(0, 3*4, 0)
         vbo.buffer_data(TRIANGLE)
 
 def bind_triangle():
