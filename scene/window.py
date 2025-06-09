@@ -10,6 +10,8 @@ class Window:
         self.height = height
         self.title = title
         self.keep_running = True
+        self.movement_speed = 1.0
+        self.mouse_sensitivity = 5.0
 
     def open(self):
         pygame.display.init()
@@ -54,13 +56,20 @@ class Window:
 
     def handle_event(self, event: pygame.event.Event):
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-            self.exit()
-            return
+            return self.exit()
 
         if event.type == pygame.MOUSEMOTION:
-            self.handle_mouse_input(event.rel[0], event.rel[1])
+            return self.handle_mouse_move(event.rel[0], event.rel[1])
 
-    def handle_mouse_input(self, delta_x, delta_y):
+        if event.type == pygame.MOUSEWHEEL:
+            return self.handle_mouse_wheel(event.y)
+
+    def handle_mouse_wheel(self, wheel):
+        delta_time = self.get_elapsed_time_in_seconds()
+        self.movement_speed += wheel * 10 * delta_time
+        self.movement_speed = max(0.2, self.movement_speed)
+
+    def handle_mouse_move(self, delta_x, delta_y):
         buttons = pygame.mouse.get_pressed()
         if buttons[2]:
             self.rotate_camera(-delta_x, -delta_y)
@@ -84,13 +93,14 @@ class Window:
         self.move_camera(*translation)
 
     def move_camera(self, right, up, forward):
-        speed = 1.0
-        elapsed_time_in_seconds = self.clock.get_time() / 1000.0
-        translation = np.array([right, up, forward]) * speed * elapsed_time_in_seconds
+        delta_time = self.get_elapsed_time_in_seconds()
+        translation = np.array([right, up, forward]) * self.movement_speed * delta_time
         self.scene.camera.translate(*translation)
 
     def rotate_camera(self, delta_x, delta_y):
-        speed = 5.0
-        elapsed_time_in_seconds = self.clock.get_time() / 1000.0
-        rotation = np.array([delta_x, delta_y, 0.0]) * speed * elapsed_time_in_seconds
+        delta_time = self.get_elapsed_time_in_seconds()
+        rotation = np.array([delta_x, delta_y, 0.0]) * self.mouse_sensitivity * delta_time
         self.scene.camera.rotate(*np.radians(rotation))
+
+    def get_elapsed_time_in_seconds(self):
+        return self.clock.get_time() / 1000.0
