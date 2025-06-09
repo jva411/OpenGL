@@ -1,9 +1,9 @@
 import numpy as np
 from objects.cube import Cube
+from objects.lights.cube import LightCube
 from scene.scene import Scene
 from scene.camera import Camera
 from scene.window import Window
-from objects.triangle import Triangle
 
 
 def main():
@@ -23,24 +23,17 @@ def main():
         far=100.0,
     )
 
-    t0 = Triangle()
-    t0.scale(0.5, 0.5, 0.0)
-    t0.translate(0.0, 0.0, 0.5)
-
-    t1 = Triangle()
-    t1.scale(0.5, 0.5, 0.0)
-    t1.translate(-0.5, -0.5, 0.5)
-
-    triangles = [t0, t1]
-
     c0 = Cube()
-    c0.translate(0.5, 0.5, 0.5)
 
     cubes = [c0]
-    # cubes = []
-    objects = [*triangles, *cubes]
 
-    scene = Scene(camera, objects)
+    l0 = LightCube(color=np.array([0.0, 0.5, 1.0]))
+    l0.translate(1.0, 0.5, 0.0)
+    l0.scale(0.3, 0.3, 0.3)
+
+    objects = [*cubes]
+    lights = [l0]
+    scene = Scene(camera, objects, lights)
 
     window.load_scene(scene)
     window.main_loop()

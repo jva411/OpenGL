@@ -18,8 +18,12 @@ class Renderer:
 
         GL.glClearColor(0.2, 0.3, 0.3, 1.0)
 
-        self.program = Program(open('assets/shaders/shader.vert', 'r').read(), open('assets/shaders/shader.frag', 'r').read())
-        self.program.bind()
+        self.triangle_program = Program(open('assets/shaders/triangle/shader.vert', 'r').read(), open('assets/shaders/triangle/shader.frag', 'r').read())
+        self.light_program = Program(open('assets/shaders/light/shader.vert', 'r').read(), open('assets/shaders/light/shader.frag', 'r').read())
+
+    def bind_program(self, program: Program):
+        self.current_program = program
+        program.bind()
 
     def tick(self):
         GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)

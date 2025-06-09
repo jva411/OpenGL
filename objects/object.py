@@ -21,4 +21,4 @@ class Object:
         self.transform.scale *= np.array([x, y, z])
 
     def updateModel(self):
-        Renderer.renderer.program.setUniformMatrix4f('model', self.transform.get_model().T)
+        Renderer.renderer.triangle_program.setUniformMatrix4f('model', self.transform.get_model().T)

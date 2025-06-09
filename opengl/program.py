@@ -22,3 +22,7 @@ class Program:
     def setUniformMatrix4f(self, name: str, matrix: np.ndarray):
         location = GL.glGetUniformLocation(self.program, name)
         GL.glUniformMatrix4fv(location, 1, GL.GL_FALSE, matrix)
+
+    def setUniformVec3f(self, name: str, vector: np.ndarray):
+        location = GL.glGetUniformLocation(self.program, name)
+        GL.glUniform3fv(location, 1, vector)

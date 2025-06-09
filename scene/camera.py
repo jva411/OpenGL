@@ -71,11 +71,10 @@ class Camera:
         self.rotated_direction = D
 
     def send_view_to_uniform(self):
-        Renderer.renderer.program.setUniformMatrix4f('view', self.get_view_matrix().T)
+        Renderer.renderer.current_program.setUniformMatrix4f('view', self.get_view_matrix().T)
 
     def send_projection_to_uniform(self):
-        Renderer.renderer.program.setUniformMatrix4f('projection', self.get_perspective_matrix().T)
+        Renderer.renderer.current_program.setUniformMatrix4f('projection', self.get_perspective_matrix().T)
 
     def tick(self):
-        self.send_view_to_uniform()
-        self.send_projection_to_uniform()
+        pass
