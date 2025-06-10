@@ -22,8 +22,9 @@ class Scene:
         Renderer.renderer.bind_program(Renderer.renderer.triangle_program)
         self.camera.send_view_to_uniform()
         self.camera.send_projection_to_uniform()
+        self.camera.send_position_to_uniform()
         for light in self.lights:
-            light.tick()
+            light.send_color_to_uniform()
 
         for obj in self.objects:
             obj.tick()

@@ -1,3 +1,7 @@
+import os
+if os.name == "posix":
+    os.environ["PYOPENGL_PLATFORM"] = "glx"
+
 import numpy as np
 from objects.cube import Cube
 from objects.lights.cube import LightCube
@@ -24,11 +28,12 @@ def main():
     )
 
     c0 = Cube()
+    c0.translate(0.0, 0.0, -1.0)
 
     cubes = [c0]
 
-    l0 = LightCube(color=np.array([0.0, 0.5, 1.0]))
-    l0.translate(1.0, 0.5, 0.0)
+    l0 = LightCube(color=np.array([0.5, 0.5, 0.5]))
+    l0.translate(0.7, 0.5, 0.0)
     l0.scale(0.3, 0.3, 0.3)
 
     objects = [*cubes]

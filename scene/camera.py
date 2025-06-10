@@ -76,5 +76,8 @@ class Camera:
     def send_projection_to_uniform(self):
         Renderer.renderer.current_program.setUniformMatrix4f('projection', self.get_perspective_matrix().T)
 
+    def send_position_to_uniform(self):
+        Renderer.renderer.current_program.setUniformVec3f('cameraPosition', self.position)
+
     def tick(self):
         pass

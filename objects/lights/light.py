@@ -18,5 +18,5 @@ class Light(Object):
         self.send_color_to_uniform()
 
     def send_color_to_uniform(self):
-        Renderer.renderer.light_program.setUniformVec3f('lColor', self.color)
-        Renderer.renderer.triangle_program.setUniformVec3f('lColor', self.color)
+        Renderer.renderer.current_program.setUniformVec3f('lightColor', self.color)
+        Renderer.renderer.current_program.setUniformVec3f('lightPosition', self.transform.position)

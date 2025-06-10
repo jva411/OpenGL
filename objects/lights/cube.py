@@ -8,7 +8,7 @@ from objects.lights.light import Light
 from objects.cube import CUBE_INDICES, CUBE_VERTICES
 
 
-LIGHT_CUBE_VERTICES = CUBE_VERTICES[:, 0]
+LIGHT_CUBE_VERTICES = CUBE_VERTICES[:, 0:3]
 
 vao: VAO = None
 vbo: VBO = None
