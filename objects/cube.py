@@ -1,10 +1,11 @@
 from pathlib import Path
 import numpy as np
-from opengl.ebo import EBO
-from opengl.texture import Texture
 from opengl.vao import VAO
 from opengl.vbo import VBO
+from opengl.ebo import EBO
 from objects.object import Object
+from opengl.texture import Texture
+from utils.material import Material
 from utils.transform import Transform
 from OpenGL.GL import glDrawElements, GL_TRIANGLES, GL_UNSIGNED_INT
 
@@ -91,8 +92,8 @@ def bind_cube():
     texture.bind()
 
 class Cube(Object):
-    def __init__(self, transform: Transform = None):
-        super().__init__(transform)
+    def __init__(self, transform: Transform = None, material: Material = None):
+        super().__init__(transform, material)
         init_cube()
 
     def tick(self):

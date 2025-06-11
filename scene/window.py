@@ -29,6 +29,7 @@ class Window:
         self.scene = scene
 
     def main_loop(self):
+        self.scene.start()
         try:
             while self.keep_running:
                 for event in pygame.event.get():

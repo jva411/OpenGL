@@ -26,3 +26,7 @@ class Program:
     def setUniformVec3f(self, name: str, vector: np.ndarray):
         location = GL.glGetUniformLocation(self.program, name)
         GL.glUniform3fv(location, 1, vector)
+
+    def setUniform1f(self, name: str, value: float):
+        location = GL.glGetUniformLocation(self.program, name)
+        GL.glUniform1f(location, value)

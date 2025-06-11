@@ -1,5 +1,6 @@
 import numpy as np
 import OpenGL.GL as GL
+from typing import Union
 from opengl.ebo import EBO
 from opengl.vao import VAO
 from opengl.vbo import VBO
@@ -36,8 +37,8 @@ def bind_light_cube():
     ebo.bind()
 
 class LightCube(Light):
-    def __init__(self, transform: Transform = None, color: np.ndarray = None):
-        super().__init__(transform, color)
+    def __init__(self, transform: Transform = None, color: np.ndarray = None, ambient: float = None, diffuse: float = None, specular: float = None):
+        super().__init__(transform, color, ambient, diffuse, specular)
         init_light_cube()
 
     def tick(self):

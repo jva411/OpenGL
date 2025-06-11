@@ -1,5 +1,6 @@
-from math import cos, sin
 import numpy as np
+from math import cos, sin
+from opengl.renderer import Renderer
 
 
 class Transform:
@@ -55,3 +56,6 @@ class Transform:
 
         model = translate_mat @ rotation_mat @ scale_mat
         return model
+
+    def setUniformTransform(self):
+        Renderer.renderer.current_program.setUniformMatrix4f('model', self.get_model().T)
