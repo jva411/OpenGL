@@ -6,7 +6,8 @@ class Texture:
     def __init__(self):
         self.texture = GL.glGenTextures(1)
 
-    def bind(self):
+    def bind(self, index: int):
+        GL.glActiveTexture(GL.GL_TEXTURE0 + index)
         GL.glBindTexture(GL.GL_TEXTURE_2D, self.texture)
 
     def load(self, filename):

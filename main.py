@@ -30,10 +30,11 @@ def main():
 
     c0 = Cube(
         material=Material(
-            ambient=np.array([1.0, 0.5, 0.31]),
-            diffuse=np.array([1.0, 0.5, 0.31]),
-            specular=np.array([0.5, 0.5, 0.5]),
-            shininess=32,
+            diffuse=[1.0, 1.0, 1.0],
+            specular=[0.5, 0.5, 0.5],
+            # diffuse=np.array([1.0, 0.5, 0.31]),
+            # specular=np.array([0.5, 0.5, 0.5]),
+            shininess=64,
         ),
     )
     c0.translate(0.0, 0.0, -1.0)
@@ -41,7 +42,7 @@ def main():
     cubes = [c0]
 
     l0 = LightCube(color=[1.0, 1.0, 1.0], ambient=0.2, diffuse=0.5)
-    l0.translate(1.5, 1.0, 0.5)
+    l0.translate(1.2, 1.0, 1.0)
     l0.scale(0.3, 0.3, 0.3)
 
     objects = [*cubes]

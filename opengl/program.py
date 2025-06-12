@@ -30,3 +30,7 @@ class Program:
     def setUniform1f(self, name: str, value: float):
         location = GL.glGetUniformLocation(self.program, name)
         GL.glUniform1f(location, value)
+
+    def setUniform1i(self, name: str, value: int):
+        location = GL.glGetUniformLocation(self.program, name)
+        GL.glUniform1i(location, value)
