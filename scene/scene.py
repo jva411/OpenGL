@@ -1,5 +1,4 @@
 import time
-from math import sin
 from scene.camera import Camera
 from objects.object import Object
 from opengl.renderer import Renderer
@@ -18,18 +17,29 @@ class Scene:
         self.elapsed_time = time.time() - self.start_time
         self.camera.tick()
 
+        # self.renderHighlightedObjects(self.objects)
+
         Renderer.renderer.bind_program(Renderer.renderer.light_program)
-        self.camera.send_view_to_uniform()
-        self.camera.send_projection_to_uniform()
+        self.camera.setCameraUniforms()
         for light in self.lights:
-            # light.color = [sin(self.elapsed_time * 0.17), sin(self.elapsed_time * 0.37), sin(self.elapsed_time * 0.41)]
             light.tick()
 
         Renderer.renderer.bind_program(Renderer.renderer.triangle_program)
-        self.camera.send_view_to_uniform()
-        self.camera.send_projection_to_uniform()
+        self.camera.setCameraUniforms()
         for light in self.lights:
             light.sendLightToUniform()
 
         for obj in self.objects:
             obj.tick()
+
+    def renderHighlightedObjects(self, highlighted_objects: list[Object]):
+        Renderer.enableHighlight()
+        Renderer.renderer.bind_program(Renderer.renderer.stencil_program)
+        self.camera.setCameraUniforms()
+        scale = 1.1
+        for obj in highlighted_objects:
+            temp = obj.transform.scale.copy()
+            obj.transform.scale *= scale
+            obj.tick()
+            obj.transform.scale = temp
+        Renderer.disableHighlight()
