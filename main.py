@@ -1,14 +1,16 @@
 import os
+
+from utils.textures import Textures
 if os.name == "posix":
     os.environ["PYOPENGL_PLATFORM"] = "glx"
 
 import numpy as np
 from objects.cube import Cube
-from objects.lights.cube import LightCube
 from scene.scene import Scene
 from scene.camera import Camera
 from scene.window import Window
 from utils.material import Material
+from objects.lights.cube import LightCube
 
 
 def main():
@@ -32,9 +34,8 @@ def main():
         material=Material(
             diffuse=[1.0, 1.0, 1.0],
             specular=[0.5, 0.5, 0.5],
-            # diffuse=np.array([1.0, 0.5, 0.31]),
-            # specular=np.array([0.5, 0.5, 0.5]),
             shininess=64,
+            textures=Textures("assets/textures/steel_framed_box.png", "assets/textures/steel_framed_box_frame.png"),
         ),
     )
     c0.translate(0.0, 0.0, -1.0)

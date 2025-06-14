@@ -17,7 +17,6 @@ in vec3 normal;
 in vec3 fragmentPosition;
 in vec3 lightInViewPosition;
 
-uniform sampler2D texture0;
 uniform Material material;
 uniform Light light;
 
@@ -39,6 +38,5 @@ void main()
     vec3 specularLight = light.specular * specular * vec3(texture(material.specular, textureCoords));
 
     vec3 finalLightColor = ambientLight + diffuseLight + specularLight;
-    // FragColor = texture(texture0, textureCoords) * vec4(finalLightColor, 1.0);
     FragColor = vec4(finalLightColor, 1.0);
 }

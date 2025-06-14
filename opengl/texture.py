@@ -1,3 +1,4 @@
+from pathlib import Path
 import cv2
 import OpenGL.GL as GL
 
@@ -10,8 +11,8 @@ class Texture:
         GL.glActiveTexture(GL.GL_TEXTURE0 + index)
         GL.glBindTexture(GL.GL_TEXTURE_2D, self.texture)
 
-    def load(self, filename):
-        image = cv2.imread(filename)
+    def load(self, filename: str):
+        image = cv2.imread(Path(filename).absolute())
         GL.glTexImage2D(
             GL.GL_TEXTURE_2D,
             0,

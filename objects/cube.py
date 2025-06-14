@@ -1,10 +1,8 @@
-from pathlib import Path
 import numpy as np
 from opengl.vao import VAO
 from opengl.vbo import VBO
 from opengl.ebo import EBO
 from objects.object import Object
-from opengl.texture import Texture
 from utils.material import Material
 from utils.transform import Transform
 from OpenGL.GL import glDrawElements, GL_TRIANGLES, GL_UNSIGNED_INT
@@ -61,8 +59,6 @@ CUBE_SKIPS = [0,      3*4,      6*4]
 vao: VAO = None
 vbo: VBO = None
 ebo: EBO = None
-texture0: Texture = None
-texture1: Texture = None
 
 def init_cube():
     global vao, vbo, ebo, texture0, texture1
@@ -82,21 +78,11 @@ def init_cube():
         ebo.bind()
         ebo.buffer_data(CUBE_INDICES)
 
-        texture0 = Texture()
-        texture0.bind(0)
-        texture0.load(Path("assets/textures/steel_framed_box.png").absolute())
-
-        texture1 = Texture()
-        texture1.bind(1)
-        texture1.load(Path("assets/textures/steel_framed_box_frame.png").absolute())
-
 
 def bind_cube():
     vao.bind()
     vbo.bind()
     ebo.bind()
-    texture0.bind(0)
-    texture1.bind(1)
 
 class Cube(Object):
     def __init__(self, transform: Transform = None, material: Material = None):

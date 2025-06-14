@@ -1,19 +1,19 @@
 import numpy as np
 from opengl.renderer import Renderer
+from utils.textures import Textures
 
 
 class Material:
-    def __init__(self, diffuse: np.ndarray, specular: np.ndarray, shininess: float):
+    def __init__(self, diffuse: np.ndarray, specular: np.ndarray, shininess: float, textures: Textures = None):
         self.diffuse = np.array(diffuse, dtype=np.float32)
         self.specular = np.array(specular, dtype=np.float32)
         self.shininess = shininess
+        self.textures = textures
 
     def setUniformMaterial(self):
-        # Renderer.renderer.current_program.setUniformVec3f('material.diffuse', self.diffuse)
-        # Renderer.renderer.current_program.setUniformVec3f('material.specular', self.specular)
-        Renderer.renderer.current_program.setUniform1i('material.diffuse', 0)
-        Renderer.renderer.current_program.setUniform1i('material.specular', 1)
         Renderer.renderer.current_program.setUniform1f('material.shininess', self.shininess)
+        if self.textures is not None:
+            self.textures.setUniformTextures()
 
     def copy(self):
         return Material(self.diffuse.copy(), self.specular.copy(), self.shininess)
