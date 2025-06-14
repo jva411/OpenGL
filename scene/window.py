@@ -73,8 +73,15 @@ class Window:
             return self.handle_mouse_wheel(event.y)
 
     def handle_mouse_button_down(self, event: pygame.event.Event):
+        if event.button == 2:
+            return self.lock_mouse()
+
         if event.button == 1:
-            self.lock_mouse()
+            x, y = event.pos
+            if self.is_mouse_locked:
+                x, y = self.width // 2, self.height // 2
+
+            return self.scene.getObjectByPixel(x, self.height - y)
 
     def handle_mouse_wheel(self, wheel):
         delta_time = self.get_elapsed_time_in_seconds()
