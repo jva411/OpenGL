@@ -19,10 +19,12 @@ class Renderer:
 
         GL.glClearColor(0.53, 0.81, 0.92, 1.0)
 
-        self.triangle_program = Program(open('assets/shaders/triangle/shader.vert', 'r').read(), open('assets/shaders/triangle/shader.frag', 'r').read())
+        triangle_vertex_shader_source = open('assets/shaders/triangle/shader.vert', 'r').read()
+        self.triangle_common_program = Program(triangle_vertex_shader_source, open('assets/shaders/triangle/common.frag', 'r').read())
+        self.triangle_texturized_program = Program(triangle_vertex_shader_source, open('assets/shaders/triangle/texturized.frag', 'r').read())
+        self.triangle_outline_program = Program(triangle_vertex_shader_source, open('assets/shaders/triangle/outline.frag', 'r').read())
+        self.triangle_selection_program = Program(open('assets/shaders/selection/shader.vert', 'r').read(), open('assets/shaders/selection/shader.frag', 'r').read())
         self.light_program = Program(open('assets/shaders/light/shader.vert', 'r').read(), open('assets/shaders/light/shader.frag', 'r').read())
-        self.stencil_program = Program(open('assets/shaders/triangle/shader.vert', 'r').read(), open('assets/shaders/triangle/outline.frag', 'r').read())
-        self.selection_program = Program(open('assets/shaders/selection/shader.vert', 'r').read(), open('assets/shaders/selection/shader.frag', 'r').read())
 
     def bind_program(self, program: Program):
         self.current_program = program

@@ -1,6 +1,4 @@
 import os
-
-from utils.textures import Textures
 if os.name == "posix":
     os.environ["PYOPENGL_PLATFORM"] = "glx"
 
@@ -10,6 +8,7 @@ from scene.scene import Scene
 from scene.camera import Camera
 from scene.window import Window
 from utils.material import Material
+from utils.textures import Textures
 from objects.lights.cube import LightCube
 
 
@@ -39,8 +38,16 @@ def main():
         ),
     )
     c0.translate(0.0, 0.0, -1.0)
+    c1 = Cube(
+        material=Material(
+            diffuse=[1.0, 0.5, 0.31],
+            specular=[0.5, 0.5, 0.5],
+            shininess=32,
+        ),
+    )
+    c1.translate(-1.1, 0.0, -1.0)
 
-    cubes = [c0]
+    cubes = [c0, c1]
 
     l0 = LightCube(color=[1.0, 1.0, 1.0], ambient=0.2, diffuse=0.5)
     l0.translate(1.2, 1.0, 1.0)

@@ -10,8 +10,9 @@ from objects.lights.light import Light
 class Scene:
     def __init__(self, camera: Camera, objects: list[Object], lights: list[Light]):
         self.camera = camera
-        self.objects = objects
         self.lights = lights
+        self.commonObjects = [obj for obj in objects if obj.material.textures is None]
+        self.texturizedObjects = [obj for obj in objects if obj.material.textures is not None]
         self.fbo: FBO = None
         self.selectedObjects: list[Object] = []
 
@@ -30,17 +31,32 @@ class Scene:
         for light in self.lights:
             light.tick()
 
-        Renderer.renderer.bind_program(Renderer.renderer.triangle_program)
-        self.camera.setCameraUniforms()
-        for light in self.lights:
-            light.sendLightToUniform()
+        # Renderer.renderer.bind_program(Renderer.renderer.triangle_texturized_program)
+        # self.camera.setCameraUniforms()
+        # for light in self.lights:
+        #     light.sendLightToUniform()
 
-        for obj in self.objects:
-            obj.tick()
+        # for obj in self.commonObjects:
+        #     obj.tick()
+        self.renderObjects()
+
+    def renderObjects(self):
+        targets = [
+            (Renderer.renderer.triangle_texturized_program, self.texturizedObjects),
+            (Renderer.renderer.triangle_common_program, self.commonObjects),
+        ]
+        for program, objects in targets:
+            Renderer.renderer.bind_program(program)
+            self.camera.setCameraUniforms()
+            for light in self.lights:
+                light.sendLightToUniform()
+
+            for obj in objects:
+                obj.tick()
 
     def renderHighlightedObjects(self):
         Renderer.enableHighlight()
-        Renderer.renderer.bind_program(Renderer.renderer.stencil_program)
+        Renderer.renderer.bind_program(Renderer.renderer.triangle_outline_program)
         self.camera.setCameraUniforms()
         scale = 1.1
         for obj in self.selectedObjects:
@@ -57,9 +73,9 @@ class Scene:
         self.fbo.bind()
         GL.glClearColor(0.0, 0.0, 0.0, 1.0)
         GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
-        Renderer.renderer.bind_program(Renderer.renderer.selection_program)
+        Renderer.renderer.bind_program(Renderer.renderer.triangle_selection_program)
         self.camera.setCameraUniforms()
-        for index, obj in enumerate(self.objects):
+        for index, obj in enumerate(self.commonObjects):
             color = self.idToColor(index+1)
             Renderer.renderer.current_program.setUniformVec3f('codeColor', color)
             obj.tick()
@@ -88,4 +104,4 @@ class Scene:
         if id == 0:
             self.selectedObjects = []
         else:
-            self.selectedObjects = [self.objects[id-1]]
+            self.selectedObjects = [self.commonObjects[id-1]]

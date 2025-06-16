@@ -29,5 +29,4 @@ class Object:
         self.transform.setUniformTransform()
 
     def sendMaterialToUniform(self):
-        if self.material is not None:
-            self.material.setUniformMaterial()
+        self.material.setUniformMaterial()
