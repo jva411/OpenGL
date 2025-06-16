@@ -33,10 +33,6 @@ class Renderer:
     def tick(self):
         GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT)
         GL.glClearColor(0.53, 0.81, 0.92, 1.0)
-        # Renderer.clear()
-
-    # def clear():
-    #     GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT)
 
     def enableHighlight():
         GL.glStencilFunc(GL.GL_NOTEQUAL, 1, 0xFF)

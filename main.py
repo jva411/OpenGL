@@ -31,8 +31,6 @@ def main():
 
     c0 = Cube(
         material=Material(
-            diffuse=[1.0, 1.0, 1.0],
-            specular=[0.5, 0.5, 0.5],
             shininess=64,
             textures=Textures("assets/textures/steel_framed_box.png", "assets/textures/steel_framed_box_frame.png"),
         ),

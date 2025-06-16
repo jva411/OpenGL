@@ -13,5 +13,7 @@ class Textures:
         self.specular.load(specular)
 
     def setUniformTextures(self):
+        self.diffuse.bind(0)
+        self.specular.bind(1)
         Renderer.renderer.current_program.setUniform1i('material.diffuse', 0)
         Renderer.renderer.current_program.setUniform1i('material.specular', 1)
