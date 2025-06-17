@@ -41,9 +41,10 @@ class Scene:
         ]
         for program, objects in targets:
             Renderer.renderer.bind_program(program)
+            program.setUniform1i('n_lights', len(self.lights))
             self.camera.setCameraUniforms()
-            for light in self.lights:
-                light.sendLightToUniform()
+            for index, light in enumerate(self.lights):
+                light.sendLightToUniform(index)
 
             for obj in objects:
                 obj.tick()

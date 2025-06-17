@@ -47,12 +47,16 @@ def main():
 
     cubes = [c0, c1]
 
-    l0 = LightCube(color=[1.0, 1.0, 1.0], ambient=0.2, diffuse=0.5)
+    l0 = LightCube(color=[1.0, 1.0, 1.0], ambient=0.1, diffuse=0.5)
     l0.translate(1.2, 1.0, 1.0)
     l0.scale(0.3, 0.3, 0.3)
 
+    l1 = LightCube(color=[1.0, 1.0, 1.0], ambient= 0.1, diffuse=0.5)
+    l1.translate(-1.2, 1.0, 1.0)
+    l1.scale(0.3, 0.3, 0.3)
+
     objects = [*cubes]
-    lights = [l0]
+    lights = [l0, l1]
     scene = Scene(camera, objects, lights)
 
     window.load_scene(scene)

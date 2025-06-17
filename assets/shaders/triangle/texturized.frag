@@ -1,12 +1,16 @@
 #version 330 core
 
+#define MAX_LIGHTS 16
+
 struct Material {
     sampler2D diffuse;
     sampler2D specular;
     float shininess;
 };
 
-struct Light {
+struct PointLight {
+    vec3 position;
+
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
@@ -15,28 +19,40 @@ struct Light {
 in vec2 textureCoords;
 in vec3 normal;
 in vec3 fragmentPosition;
-in vec3 lightInViewPosition;
 
 uniform Material material;
-uniform Light light;
+uniform PointLight[MAX_LIGHTS] lights;
+uniform int n_lights;
+uniform vec3 cameraPosition;
 
 out vec4 FragColor;
 
+vec3 CalcPointLight(PointLight light, vec3 cameraDirection);
+
 void main()
 {
+    vec3 cameraDirection = normalize(cameraPosition - fragmentPosition);
+
+    vec3 finalColor = vec3(0.0, 0.0, 0.0);
+    for (int i=0; i<n_lights; i++) {
+        finalColor += CalcPointLight(lights[i], cameraDirection);
+    }
+
+    FragColor = vec4(finalColor, 1.0);
+}
+
+vec3 CalcPointLight(PointLight light, vec3 cameraDirection) {
     vec3 diffuseMapped = vec3(texture(material.diffuse, textureCoords));
 
     vec3 ambientLight = light.ambient * diffuseMapped;
 
-    vec3 lightDirection = normalize(lightInViewPosition - fragmentPosition);
+    vec3 lightDirection = normalize(light.position - fragmentPosition);
     float diffuse = max(dot(normal, lightDirection), 0.0);
     vec3 diffuseLight = light.diffuse * diffuse * diffuseMapped;
 
-    vec3 viewDirection = normalize(-fragmentPosition);
     vec3 reflectedLightDirection = reflect(-lightDirection, normal);
-    float specular = pow(max(dot(viewDirection, reflectedLightDirection), 0.0), material.shininess);
+    float specular = pow(max(dot(cameraDirection, reflectedLightDirection), 0.0), material.shininess);
     vec3 specularLight = light.specular * specular * vec3(texture(material.specular, textureCoords));
 
-    vec3 finalLightColor = ambientLight + diffuseLight + specularLight;
-    FragColor = vec4(finalLightColor, 1.0);
+    return (ambientLight + diffuseLight + specularLight);
 }

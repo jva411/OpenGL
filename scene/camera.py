@@ -82,7 +82,7 @@ class Camera:
     def setCameraUniforms(self):
         self.send_view_to_uniform()
         self.send_projection_to_uniform()
-        # self.send_position_to_uniform()
+        self.send_position_to_uniform()
 
     def tick(self):
         pass

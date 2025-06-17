@@ -37,9 +37,10 @@ class Light(Object):
         super().tick()
         self.sendLightToUniform()
 
-    def sendLightToUniform(self):
-        Renderer.renderer.current_program.setUniformVec3f('lightPosition', self.transform.position)
+    def sendLightToUniform(self, index: int = None):
         Renderer.renderer.current_program.setUniformVec3f('lightColor', self._color)
-        Renderer.renderer.current_program.setUniformVec3f('light.ambient', self.ambient_color)
-        Renderer.renderer.current_program.setUniformVec3f('light.diffuse', self.diffuse_color)
-        Renderer.renderer.current_program.setUniformVec3f('light.specular', self.specular_color)
+        if index is not None:
+            Renderer.renderer.current_program.setUniformVec3f(f'lights[{index}].position', self.transform.position)
+            Renderer.renderer.current_program.setUniformVec3f(f'lights[{index}].ambient', self.ambient_color)
+            Renderer.renderer.current_program.setUniformVec3f(f'lights[{index}].diffuse', self.diffuse_color)
+            Renderer.renderer.current_program.setUniformVec3f(f'lights[{index}].specular', self.specular_color)
