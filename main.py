@@ -49,11 +49,11 @@ def main():
 
     l0 = LightCube(color=[1.0, 1.0, 1.0], ambient=0.1, diffuse=0.5)
     l0.translate(1.2, 1.0, 1.0)
-    l0.scale(0.3, 0.3, 0.3)
+    l0.scale(-0.7, -0.7, -0.7)
 
     l1 = LightCube(color=[1.0, 1.0, 1.0], ambient= 0.1, diffuse=0.5)
     l1.translate(-1.2, 1.0, 1.0)
-    l1.scale(0.3, 0.3, 0.3)
+    l1.scale(-0.7, -0.7, -0.7)
 
     objects = [*cubes]
     lights = [l0, l1]

@@ -13,6 +13,7 @@ class Window:
         self.movement_speed = 1.0
         self.mouse_sensitivity = 8.0
         self.is_mouse_locked = False
+        self.transform_object_mode = 'translate'
 
     def open(self):
         pygame.display.init()
@@ -100,21 +101,28 @@ class Window:
 
             return self.unlock_mouse()
 
+        if key == pygame.K_t:
+            self.transform_object_mode = 'translate'
+        if key == pygame.K_r:
+            self.transform_object_mode = 'rotate'
+        if key == pygame.K_e:
+            self.transform_object_mode = 'scale'
+
     def handle_kb_input(self):
         keys = pygame.key.get_pressed()
-        translation = np.array([0.0, 0.0, 0.0])
+        camera_translation = np.array([0.0, 0.0, 0.0])
         if keys[pygame.K_w]:
-            translation += np.array([0.0, 0.0, -1.0])
+            camera_translation += np.array([0.0, 0.0, -1.0])
         if keys[pygame.K_s]:
-            translation += np.array([0.0, 0.0, 1.0])
+            camera_translation += np.array([0.0, 0.0, 1.0])
         if keys[pygame.K_a]:
-            translation += np.array([-1.0, 0.0, 0.0])
+            camera_translation += np.array([-1.0, 0.0, 0.0])
         if keys[pygame.K_d]:
-            translation += np.array([1.0, 0.0, 0.0])
+            camera_translation += np.array([1.0, 0.0, 0.0])
         if keys[pygame.K_SPACE]:
-            translation += np.array([0.0, 1.0, 0.0])
+            camera_translation += np.array([0.0, 1.0, 0.0])
         if keys[pygame.K_LSHIFT]:
-            translation += np.array([0.0, -1.0, 0.0])
+            camera_translation += np.array([0.0, -1.0, 0.0])
 
         sprint = 1.0
         if keys[pygame.K_LCTRL]:
@@ -122,8 +130,26 @@ class Window:
         if keys[pygame.K_LALT]:
             sprint *= 0.5
 
-        if translation.any():
-            self.move_camera(*translation, sprint=sprint)
+        if camera_translation.any():
+            self.move_camera(*camera_translation, sprint=sprint)
+
+        if len(self.scene.selectedObjects) > 0:
+            object_translation = np.array([0.0, 0.0, 0.0])
+            if keys[pygame.K_UP]:
+                object_translation += np.array([0.0, 1.0, 0.0])
+            if keys[pygame.K_DOWN]:
+                object_translation += np.array([0.0, -1.0, 0.0])
+            if keys[pygame.K_LEFT]:
+                object_translation += np.array([-1.0, 0.0, 0.0])
+            if keys[pygame.K_RIGHT]:
+                object_translation += np.array([1.0, 0.0, 0.0])
+            if keys[pygame.K_PAGEUP]:
+                object_translation += np.array([0.0, 0.0, 1.0])
+            if keys[pygame.K_PAGEDOWN]:
+                object_translation += np.array([0.0, 0.0, -1.0])
+
+            if object_translation.any():
+                self.transform_object(*object_translation, sprint)
 
     def move_camera(self, right, up, forward, sprint=1.0):
         delta_time = self.get_elapsed_time_in_seconds()
@@ -134,6 +160,20 @@ class Window:
         delta_time = self.get_elapsed_time_in_seconds()
         rotation = np.array([delta_x, delta_y, 0.0]) * self.mouse_sensitivity * delta_time
         self.scene.camera.rotate(*np.radians(rotation))
+
+    def transform_object(self, right, up, forward, sprint=1.0):
+        delta_time = self.get_elapsed_time_in_seconds()
+        transform = np.array([right, up, forward]) * delta_time * sprint
+
+        match self.transform_object_mode:
+            case 'translate':
+                self.scene.selectedObjects[0].translate(*transform)
+            case 'scale':
+                self.scene.selectedObjects[0].scale(*transform)
+            case 'rotate':
+                rotation = (transform * 25.0)[[1, 0, 2]]
+                rotation[0] *= -1.0
+                self.scene.selectedObjects[0].rotate(*rotation)
 
     def get_elapsed_time_in_seconds(self):
         return self.clock.get_time() / 1000.0

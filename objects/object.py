@@ -23,7 +23,10 @@ class Object:
         self.transform.position += np.array([x, y, z])
 
     def scale(self, x, y, z):
-        self.transform.scale *= np.array([x, y, z])
+        self.transform.scale += np.array([x, y, z])
+
+    def rotate(self, x, y, z):
+        self.transform.rotation += np.array([x, y, z])
 
     def sendTransformToUniform(self):
         self.transform.setUniformTransform()

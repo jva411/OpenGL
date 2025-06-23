@@ -25,7 +25,7 @@ class Transform:
         translate_mat = np.eye(4)
         translate_mat[:3, 3] = self.position
 
-        rx, ry, rz = self.rotation
+        rx, ry, rz = np.radians(self.rotation)
 
         # Rotation around X axis (pitch)
         rx_mat = np.eye(4)

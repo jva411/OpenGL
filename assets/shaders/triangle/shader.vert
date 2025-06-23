@@ -19,5 +19,5 @@ void main()
     gl_Position = projection * view * worldPos;
     fragmentPosition = vec3(worldPos);
     textureCoords = aTextureCoords;
-    normal = mat3(transpose(inverse(model))) * aNormal;
+    normal = normalize(mat3(transpose(inverse(model))) * aNormal);
 }
