@@ -12,8 +12,10 @@ class Scene:
         self.camera = camera
         self.lights = lights
         self.objects = [*lights, *objects]
-        self.commonObjects = [obj for obj in objects if obj.material.textures is None]
-        self.texturizedObjects = [obj for obj in objects if obj.material.textures is not None]
+        self.commonObjects = [obj for obj in objects if obj.is_compound is False and obj.material.textures is None]
+        self.texturizedObjects = [obj for obj in objects if obj.is_compound is False and obj.material.textures is not None]
+        self.commonObjects.extend(obj2 for obj in objects if obj.is_compound is True for obj2 in obj if obj2.material.textures is None)
+        self.texturizedObjects.extend(obj2 for obj in objects if obj.is_compound is True for obj2 in obj if obj2.material.textures is not None)
         self.fbo: FBO = None
         self.selectedObjects: list[Object] = []
 

@@ -103,10 +103,15 @@ class Window:
 
         if key == pygame.K_t:
             self.transform_object_mode = 'translate'
+            return
         if key == pygame.K_r:
             self.transform_object_mode = 'rotate'
+            return
         if key == pygame.K_e:
             self.transform_object_mode = 'scale'
+            return
+        if key == pygame.K_u:
+            return self.normalize_object_scale()
 
     def handle_kb_input(self):
         keys = pygame.key.get_pressed()
@@ -164,16 +169,21 @@ class Window:
     def transform_object(self, right, up, forward, sprint=1.0):
         delta_time = self.get_elapsed_time_in_seconds()
         transform = np.array([right, up, forward]) * delta_time * sprint
+        transform = np.round(transform, 2)
 
         match self.transform_object_mode:
             case 'translate':
                 self.scene.selectedObjects[0].translate(*transform)
             case 'scale':
-                self.scene.selectedObjects[0].scale(*transform)
+                self.scene.selectedObjects[0].scale(*(1 + transform))
             case 'rotate':
                 rotation = (transform * 25.0)[[1, 0, 2]]
                 rotation[0] *= -1.0
                 self.scene.selectedObjects[0].rotate(*rotation)
+
+    def normalize_object_scale(self):
+        if self.transform_object_mode == 'scale' and len(self.scene.selectedObjects) > 0:
+            self.scene.selectedObjects[0].normalize_scale()
 
     def get_elapsed_time_in_seconds(self):
         return self.clock.get_time() / 1000.0

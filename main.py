@@ -1,4 +1,6 @@
 import os
+
+from objects.model import Model
 if os.name == "posix":
     os.environ["PYOPENGL_PLATFORM"] = "glx"
 
@@ -29,6 +31,9 @@ def main():
         far=100.0,
     )
 
+    objects = []
+
+    cubes = []
     c0 = Cube(
         material=Material(
             shininess=64,
@@ -36,6 +41,7 @@ def main():
         ),
     )
     c0.translate(0.0, 0.0, -1.0)
+    cubes.append(c0)
     c1 = Cube(
         material=Material(
             diffuse=[1.0, 0.5, 0.31],
@@ -44,18 +50,23 @@ def main():
         ),
     )
     c1.translate(-1.1, 0.0, -1.0)
+    cubes.append(c1)
 
-    cubes = [c0, c1]
+    objects.extend(cubes)
+
+    backpack = Model("assets/models/backpack/backpack.obj")
+    backpack.scale(0.3, 0.3, 0.3)
+    backpack.translate(0.0, 1.3, -1.0)
+    objects.append(backpack)
 
     l0 = LightCube(color=[1.0, 1.0, 1.0], ambient=0.1, diffuse=0.5)
     l0.translate(1.2, 1.0, 1.0)
-    l0.scale(-0.7, -0.7, -0.7)
+    l0.scale(0.3, 0.3, 0.3)
 
     l1 = LightCube(color=[1.0, 1.0, 1.0], ambient= 0.1, diffuse=0.5)
     l1.translate(-1.2, 1.0, 1.0)
-    l1.scale(-0.7, -0.7, -0.7)
+    l1.scale(0.3, 0.3, 0.3)
 
-    objects = [*cubes]
     lights = [l0, l1]
     scene = Scene(camera, objects, lights)
 

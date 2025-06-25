@@ -14,6 +14,7 @@ class Object:
 
         self.transform = transform
         self.material = material
+        self.is_compound = False
 
     def tick(self):
         self.sendTransformToUniform()
@@ -23,7 +24,11 @@ class Object:
         self.transform.position += np.array([x, y, z])
 
     def scale(self, x, y, z):
-        self.transform.scale += np.array([x, y, z])
+        self.transform.scale *= np.array([x, y, z])
+
+    def normalize_scale(self):
+        mean = np.mean(self.transform.scale)
+        self.transform.scale = np.array([mean, mean, mean], dtype=np.float32)
 
     def rotate(self, x, y, z):
         self.transform.rotation += np.array([x, y, z])
