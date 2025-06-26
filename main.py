@@ -1,12 +1,11 @@
 import os
-
-from objects.model import Model
 if os.name == "posix":
     os.environ["PYOPENGL_PLATFORM"] = "glx"
 
 import numpy as np
 from objects.cube import Cube
 from scene.scene import Scene
+from objects.model import Model
 from scene.camera import Camera
 from scene.window import Window
 from utils.material import Material

@@ -99,7 +99,8 @@ class Model(Object):
                 if line.startswith('newmtl'):
                     current_material = line.split()[1]
                     materials[current_material] = BLANK.copy()
-                elif line.startswith('map_Kd') and current_material:
+                    # TODO: ajustar as texturas se não foram carregadas com sucesso ou estiverem faltando.
+                elif (line.startswith('map_Kd') or line.startswith('map_Ks')) and current_material:
                     # Extrai o caminho da textura do arquivo .mtl
                     path_in_mtl = line.split(maxsplit=1)[1].strip()
 
@@ -111,17 +112,19 @@ class Model(Object):
 
                     # Se o arquivo não for encontrado, tenta trocar a extensão para .png
                     if not os.path.exists(local_texture_path):
-                        base_name, _ = os.path.splitext(local_texture_path)
-                        png_path = base_name + '.png'
-                        if os.path.exists(png_path):
-                            local_texture_path = png_path
+                        print(f"Arquivo de textura '{local_texture_path}' nao encontrado.")
+                        continue
 
-                    # Tenta carregar a textura. Se o arquivo ainda não existir, o material ficará sem textura.
+                    if materials[current_material].textures is None:
+                        materials[current_material].textures = Textures()
+
                     try:
-                        specular_path = local_texture_path # Simplificação, usando a mesma textura para especular
-                        materials[current_material].textures = Textures(local_texture_path, specular_path)
+                        if line.startswith('map_Kd'):
+                            materials[current_material].textures.loadDiffuse(local_texture_path)
+                        else:
+                            materials[current_material].textures.loadSpecular(local_texture_path)
                     except Exception as e:
-                        print(f"Aviso: Não foi possível carregar a textura '{local_texture_path}'. Erro: {e}")
+                        print(f"Não foi possível carregar a textura '{local_texture_path}'. Erro: {e}")
 
                 elif line.startswith('Ns') and current_material:
                     materials[current_material].shininess = float(line.split()[1])
